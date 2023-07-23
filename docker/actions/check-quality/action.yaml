@@ -1,0 +1,15 @@
+name: "Check quality"
+description: "Check the quality of the Dockerfile"
+inputs:
+  dockerfile_path:
+    description: "where is the dockerfile to check"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Run Hadolint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: "${{ inputs.dockerfile_path }}"
+        # Ignore the RUN rules to preserve the form
+        ignore: "DL3059"
