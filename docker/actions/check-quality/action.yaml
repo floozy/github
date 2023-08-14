@@ -18,6 +18,6 @@ runs:
       run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
       shell: bash
     - name: Run Hadolint
-      if: ! inputs.hadolint_config_file_path
-      run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
+      if: inputs.hadolint_config_file_path == ''
+      run: hadolint ${{ inputs.dockerfile_path }}
       shell: bash
