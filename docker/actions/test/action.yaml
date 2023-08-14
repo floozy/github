@@ -12,9 +12,9 @@ runs:
   steps:
     - name: Install Container Structure Test
       run: |
-        curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-$(uname -s)-$(uname -m) && \
-        chmod +x container-structure-test-$(uname -s)-$(uname -m) && \
-        sudo mv container-structure-test-$(uname -s)-$(uname -m) /usr/local/bin/container-structure-test
+        curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-$(uname -s)-$(uname -m | sed 's/x86_64/amd64/') && \
+        chmod +x container-structure-test-$(uname -s)-$(uname -m | sed 's/x86_64/amd64/') && \
+        sudo mv container-structure-test-$(uname -s)-$(uname -m | sed 's/x86_64/amd64/') /usr/local/bin/container-structure-test
       shell: bash
     - name: Run Container Structure Test
       run: container-structure-test test --image ${{ inputs.image_tag }} --config ${{ inputs.cst_config_file_path }}
