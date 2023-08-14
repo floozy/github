@@ -19,9 +19,9 @@ runs:
   steps:
     - name: Build image
       if: inputs.image_build_args
-      run: docker buildx build -t ${{ inputs.image_name }}:latest --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }} ${{ inputs.context }}
+      run: docker build -t ${{ inputs.image_name }}:latest --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }} ${{ inputs.context }}
       shell: bash
     - name: Build image
       if: inputs.image_build_args == ''
-      run: docker buildx build -t ${{ inputs.image_name }}:latest -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
+      run: docker build -t ${{ inputs.image_name }}:latest -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
       shell: bash
