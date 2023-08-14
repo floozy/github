@@ -1,9 +1,9 @@
 name: "Check quality"
 description: "Check the quality of the Dockerfile"
 inputs:
-  # hadolint_config_file_path:
-  #   description: "where is the hadolint config file to use"
-  #   required: true
+  hadolint_config_file_path:
+    description: "where is the hadolint config file to use"
+    required: true
   dockerfile_path:
     description: "where is the dockerfile to check"
     required: true
@@ -14,6 +14,6 @@ runs:
       run: curl -sL -o hadolint "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-$(uname -s)-$(uname -m)" && chmod +x hadolint && sudo mv hadolint /usr/local/bin/
       shell: bash
     - name: Run Hadolint
-      run: hadolint ${{ inputs.dockerfile_path }}
+      run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
       shell: bash
 # --config ${{ inputs.hadolint_config_file_path }}
