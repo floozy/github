@@ -1,16 +1,12 @@
 name: "Run tests"
 description: "Run the tests to validate an image"
 inputs:
-  dockerfile_path:
-    description: "where is the dockerfile to check"
+  image_tag:
+    description: "what is the tag of the image to test"
     required: true
-  hadolint_version:
-    description: "what is the hadolint version to use"
+  cst_config_file_path:
+    description: "where is the container structure test config file to use"
     required: true
-    default: 2.12.0
-  hadolint_config_file_path:
-    description: "where is the hadolint config file to use"
-    required: false
 runs:
   using: "composite"
   steps:
@@ -20,14 +16,6 @@ runs:
         chmod +x container-structure-test-$(uname -s)-$(uname -m) && \
         sudo mv container-structure-test-$(uname -s)-$(uname -m) /usr/local/bin/container-structure-test
       shell: bash
-    - name: CST helm
-      run: container-structure-test -h
+    - name: Run Container Structure Test
+      run: container-structure-test --image ${{ inputs.image_tag }} --config ${{ inputs.cst_config_file_path }}
       shell: bash
-    # - name: Run Hadolint
-    #   if: inputs.hadolint_config_file_path
-    #   run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
-    #   shell: bash
-    # - name: Run Hadolint
-    #   if: inputs.hadolint_config_file_path == ''
-    #   run: hadolint ${{ inputs.dockerfile_path }}
-    #   shell: bash
