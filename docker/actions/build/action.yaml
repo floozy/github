@@ -1,0 +1,23 @@
+name: "Build"
+description: "Build an image"
+inputs:
+  image_name:
+    description: "what is the name of the image to publish"
+    required: true
+  dockerfile_path:
+    description: "where is the dockerfile to check"
+    required: true
+  image_build_args:
+    description: "add build arg used to build an image"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Build image
+      if: inputs.image_build_args
+      run: docker build -t ${{ inputs.image_name }}:latest --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }}
+      shell: bash
+    - name: Build image
+      if: inputs.image_build_args == ''
+      run: docker build -t ${{ inputs.image_name }}:latest ${{ inputs.dockerfile_path }}
+      shell: bash
