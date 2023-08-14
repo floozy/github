@@ -19,5 +19,5 @@ runs:
       shell: bash
     - name: Build image
       if: inputs.image_build_args == ''
-      run: docker build -t ${{ inputs.image_name }}:latest ${{ inputs.dockerfile_path }}
+      run: docker build -t ${{ inputs.image_name }}:latest -f ${{ inputs.dockerfile_path }}
       shell: bash
