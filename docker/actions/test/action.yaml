@@ -21,7 +21,7 @@ runs:
         sudo mv container-structure-test-$(uname -s)-$(uname -m) /usr/local/bin/container-structure-test
       shell: bash
     - name: CST helm
-      run: container-structure-test test -h
+      run: container-structure-test -h
       shell: bash
     # - name: Run Hadolint
     #   if: inputs.hadolint_config_file_path
