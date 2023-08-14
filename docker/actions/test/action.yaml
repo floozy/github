@@ -1,0 +1,33 @@
+name: "Run tests"
+description: "Run the tests to validate an image"
+inputs:
+  dockerfile_path:
+    description: "where is the dockerfile to check"
+    required: true
+  hadolint_version:
+    description: "what is the hadolint version to use"
+    required: true
+    default: 2.12.0
+  hadolint_config_file_path:
+    description: "where is the hadolint config file to use"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Install Container Structure Test
+      run: |
+        curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-$(uname -s)-$(uname -m) && \
+        chmod +x container-structure-test-$(uname -s)-$(uname -m) && \
+        sudo mv container-structure-test-$(uname -s)-$(uname -m) /usr/local/bin/container-structure-test
+      shell: bash
+    - name: CST helm
+      run: container-structure-test test -h
+      shell: bash
+    # - name: Run Hadolint
+    #   if: inputs.hadolint_config_file_path
+    #   run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
+    #   shell: bash
+    # - name: Run Hadolint
+    #   if: inputs.hadolint_config_file_path == ''
+    #   run: hadolint ${{ inputs.dockerfile_path }}
+    #   shell: bash
