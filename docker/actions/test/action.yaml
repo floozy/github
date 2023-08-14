@@ -17,5 +17,5 @@ runs:
         sudo mv container-structure-test-$(uname -s)-$(uname -m) /usr/local/bin/container-structure-test
       shell: bash
     - name: Run Container Structure Test
-      run: container-structure-test --image ${{ inputs.image_tag }} --config ${{ inputs.cst_config_file_path }}
+      run: container-structure-test test --image ${{ inputs.image_tag }} --config ${{ inputs.cst_config_file_path }}
       shell: bash
