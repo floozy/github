@@ -27,8 +27,9 @@ inputs:
     description: "save or not the image built"
     required: false
   output_save:
-    description: "save or not the image built"
+    description: "where is the output directory for the save"
     required: false
+    default: "."
 runs:
   using: "composite"
   steps:
@@ -42,5 +43,5 @@ runs:
       shell: bash
     - name: Save the image
       # if: inputs.must_be_save == true
-      run: docker save -o ${{ inputs.image_tag }}
+      run: docker save -o ${{ inputs.output_save }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }}
       shell: bash
