@@ -1,13 +1,17 @@
 name: "Check vulnerabilities"
-description: "Check the vulnerabilities in the Dockerfile"
+description: "Check the vulnerabilities"
 inputs:
   grype_version:
     description: "what is the grype version to use"
     required: true
     default: 0.66.0
-  image_tag:
-    description: "what is the tag of the image to check"
+  data:
+    description: "what is the data to check"
     required: true
+  severity:
+    description: "what is the severity to fail"
+    required: true
+    default: medium
 runs:
   using: "composite"
   steps:
@@ -17,5 +21,5 @@ runs:
       shell: bash
     - name: Run Grype
       run: |
-        grype ${{ inputs.image_tag }}
+        grype ${{ inputs.data }} --fail-on ${{ inputs.severity }}
       shell: bash
