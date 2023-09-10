@@ -5,6 +5,10 @@ inputs:
     description: "what is the fqdn of the registry used"
     required: true
     default: ghcr.io
+  registry_repo:
+    description: "what is the repository of the registry used"
+    required: true
+    default: docker
   registry_username:
     description: "what is the username used to login to the registry"
     required: true
@@ -17,28 +21,17 @@ inputs:
   image_version:
     description: "what is the version of the image to publish"
     required: true
-  context:
-    description: "where is the directory with the Dockerfile"
-    required: true
-    default: "."
-  image_build_args:
-    description: "add build arg used to build an image"
-    required: false
 runs:
   using: "composite"
   steps:
-    - name: Login to Github Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ${{ inputs.registry_fqdn }}
-        username: ${{ inputs.registry_username }}
-        password: ${{ inputs.registry_password }}
-    - name: Build and push image
-      uses: docker/build-push-action@v2
-      with:
-        context: ${{ inputs.context }}
-        push: true
-        tags: |
-          ghcr.io/floozy/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
-          ghcr.io/floozy/docker/${{ inputs.image_name }}:latest
-        build-args: ${{ inputs.image_build_args }}
+    - name: Afficher la variable
+      run: |
+        # Utilisation de ${{ env.VARIABLE }} pour accéder aux variables d'environnement
+        echo "Ma variable : ${{ github.repository }}"
+      shell: bash
+    # - name: Login to Github Container Registry
+    #   run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}
+    #   shell: bash
+    # - name: Push image
+    #   run: docker pull ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.registry_username }}/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
+    #   shell: bash
