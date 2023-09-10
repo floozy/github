@@ -25,5 +25,5 @@ runs:
       run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
       shell: bash
     - name: Push image
-      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }}
+      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
       shell: bash
