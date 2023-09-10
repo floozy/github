@@ -16,10 +16,8 @@ runs:
   using: "composite"
   steps:
     - name: Install Grype
-      run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin v${{ inputs.grype_version }}
+      run: curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin v${{ inputs.grype_version }}
       shell: bash
     - name: Run Grype
-      run: |
-        grype ${{ inputs.data }} --fail-on ${{ inputs.severity }}
+      run: grype ${{ inputs.data }} --fail-on ${{ inputs.severity }}
       shell: bash

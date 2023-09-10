@@ -21,7 +21,6 @@ runs:
         chmod +x hadolint && \
         sudo mv hadolint /usr/local/bin/
       shell: bash
-
     - name: Run Hadolint
       if: inputs.hadolint_config_file_path
       run: hadolint --config ${{ inputs.hadolint_config_file_path }} ${{ inputs.dockerfile_path }}
