@@ -23,6 +23,9 @@ inputs:
   image_build_args:
     description: "add build arg used to build an image"
     required: false
+  must_be_save:
+    description: "save or not the image built"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -33,4 +36,8 @@ runs:
     - name: Build image
       if: inputs.image_build_args == ''
       run: docker build -t ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
+      shell: bash
+    - name: Save the image
+      if: inputs.must_be_save
+      run: docker save -o ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }}
       shell: bash
