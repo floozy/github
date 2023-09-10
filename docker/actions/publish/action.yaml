@@ -24,14 +24,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Afficher la variable
-      run: |
-        # Utilisation de ${{ env.VARIABLE }} pour accéder aux variables d'environnement
-        echo "Ma variable : ${{ inputs.registry_repo }}"
-      shell: bash
     - name: Login to Github Container Registry
       run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}
       shell: bash
-    # - name: Push image
-    #   run: docker pull ${{ inputs.registry_repo }}/${{ inputs.registry_username }}/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
-    #   shell: bash
+    - name: Push image
+      run: docker pull ${{ inputs.registry_repo }}/${{ inputs.registry_username }}/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
+      shell: bash
