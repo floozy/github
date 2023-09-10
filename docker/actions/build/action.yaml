@@ -38,6 +38,6 @@ runs:
       run: docker build -t ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
       shell: bash
     - name: Save the image
-      if: inputs.must_be_save
-      run: docker save -o ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }}
+      if: inputs.must_be_save == true
+      run: docker save -o ${{ inputs.image_tag }}
       shell: bash
