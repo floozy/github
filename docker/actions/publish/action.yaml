@@ -8,7 +8,7 @@ inputs:
   registry_repo:
     description: "what is the repository of the registry used"
     required: true
-    default: docker
+    default: ${{ github.repository }}
   registry_username:
     description: "what is the username used to login to the registry"
     required: true
@@ -27,11 +27,11 @@ runs:
     - name: Afficher la variable
       run: |
         # Utilisation de ${{ env.VARIABLE }} pour accéder aux variables d'environnement
-        echo "Ma variable : ${{ github.repository }}"
+        echo "Ma variable : ${{ inputs.registry_repo }}"
       shell: bash
-    # - name: Login to Github Container Registry
-    #   run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}
-    #   shell: bash
+    - name: Login to Github Container Registry
+      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}
+      shell: bash
     # - name: Push image
-    #   run: docker pull ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.registry_username }}/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
+    #   run: docker pull ${{ inputs.registry_repo }}/${{ inputs.registry_username }}/docker/${{ inputs.image_name }}:${{ inputs.image_version }}
     #   shell: bash
