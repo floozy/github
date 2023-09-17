@@ -28,5 +28,5 @@ runs:
       run: docker tag ${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
       shell: bash
     - name: Push image
-      run: docker push ${{ inputs.registry_repo }}/${{ inputs.image_tag }}
+      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
       shell: bash
