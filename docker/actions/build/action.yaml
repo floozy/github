@@ -1,14 +1,6 @@
 name: "Build image"
 description: "Build an image"
 inputs:
-  registry_fqdn:
-    description: "what is the fqdn of the registry used"
-    required: true
-    default: ghcr.io
-  registry_repo:
-    description: "what is the repository of the registry used"
-    required: true
-    default: ${{ github.repository }}
   image_tag:
     description: "what is the tag of the image to build"
     required: true
@@ -28,9 +20,9 @@ runs:
   steps:
     - name: Build image
       if: inputs.image_build_args
-      run: docker build -t ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }} ${{ inputs.context }}
+      run: docker build -t ${{ inputs.image_tag }} --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }} ${{ inputs.context }}
       shell: bash
     - name: Build image
       if: inputs.image_build_args == ''
-      run: docker build -t ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}/${{ inputs.image_tag }} -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
+      run: docker build -t ${{ inputs.image_tag }} -f ${{ inputs.dockerfile_path }} ${{ inputs.context }}
       shell: bash
