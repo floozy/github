@@ -4,6 +4,7 @@ inputs:
   image_name:
     description: "what is the name of the image to build"
     required: true
+    default: ${{ github.repository }}
   dockerfile_path:
     description: "where is the dockerfile to check"
     required: true

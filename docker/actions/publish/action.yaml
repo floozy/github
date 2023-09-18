@@ -14,9 +14,11 @@ inputs:
   image_name:
     description: "what is the name of the image to push"
     required: true
+    default: ${{ github.repository }}
   image_tag:
     description: "what is the tag of the image to push"
     required: true
+    default: ${{ github.ref_name }}
 runs:
   using: "composite"
   steps:
