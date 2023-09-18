@@ -11,6 +11,9 @@ inputs:
   registry_password:
     description: "what is the password used to login to the registry"
     required: true
+  image_name:
+    description: "what is the name of the image to push"
+    required: true
   image_tag:
     description: "what is the tag of the image to push"
     required: true
@@ -18,11 +21,11 @@ runs:
   using: "composite"
   steps:
     - name: Login to Github Container Registry
-      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
+      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
       shell: bash
     - name: Tag image
-      run: docker tag ${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
+      run: docker tag ${{ inputs.image_name }}:${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
       shell: bash
     - name: Push image
-      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
+      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
       shell: bash

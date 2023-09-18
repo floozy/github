@@ -1,8 +1,8 @@
 name: "Run tests"
 description: "Run the tests to validate an image"
 inputs:
-  image_tag:
-    description: "what is the tag of the image to test"
+  image_name:
+    description: "what is the name of the image to test"
     required: true
   cst_config_file_path:
     description: "where is the container structure test config file to use"
@@ -19,5 +19,5 @@ runs:
         sudo mv container-structure-test-$system-$arch /usr/local/bin/container-structure-test
       shell: bash
     - name: Run Container Structure Test
-      run: container-structure-test test --image ${{ inputs.image_tag }} --config ${{ inputs.cst_config_file_path }}
+      run: container-structure-test test --image ${{ inputs.image_name }} --config ${{ inputs.cst_config_file_path }}
       shell: bash
