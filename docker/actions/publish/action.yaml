@@ -5,10 +5,6 @@ inputs:
     description: "what is the fqdn of the registry used"
     required: true
     default: ghcr.io
-  registry_repo:
-    description: "what is the repository of the registry used"
-    required: true
-    default: ${{ github.repository }}
   registry_username:
     description: "what is the username used to login to the registry"
     required: true
@@ -22,11 +18,11 @@ runs:
   using: "composite"
   steps:
     - name: Login to Github Container Registry
-      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
+      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
       shell: bash
     - name: Tag image
-      run: docker tag ${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
+      run: docker tag ${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
       shell: bash
     - name: Push image
-      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.registry_repo }}
+      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_tag }}
       shell: bash
