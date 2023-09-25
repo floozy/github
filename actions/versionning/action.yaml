@@ -1,0 +1,26 @@
+name: "Define version"
+description: "Define the new version based on convential commit"
+inputs:
+  current_version:
+    description: "what is the current version to modify"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install semver
+      run: npm install -g semver
+      shell: bash
+    - name: Define the new version
+      id: determine_new_version
+      run: |
+        version=${{ inputs.current_version }}
+        commit_message=$(git log --pretty=format:"%s" HEAD^..HEAD)
+        if [[ $commit_message =~ .*!.*: ]]; then
+          version=$(semver --increment major $version)
+        elif [[ $commit_message =~ ^fix.*: ]]; then
+          version=$(semver --increment patch $version)
+        elif [[ $commit_message =~ ^feat.*: ]]; then
+          version=$(semver --increment minor $version)
+        fi
+        echo "new_version=$new_version" >> $GITHUB_OUTPUT
+      shell: bash
