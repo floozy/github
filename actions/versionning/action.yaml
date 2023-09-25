@@ -4,6 +4,10 @@ inputs:
   current_version:
     description: "what is the current version to modify"
     required: true
+outputs:
+  version:
+    description: "the new version definied"
+    value: ${{ steps.determine_new_version.outputs.version }}
 runs:
   using: "composite"
   steps:
