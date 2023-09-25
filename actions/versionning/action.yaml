@@ -7,9 +7,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: TEST
-      run: echo ${{ inputs.current_version }}
-      shell: bash
     - name: Install semver
       run: npm install -g semver
       shell: bash
@@ -25,5 +22,5 @@ runs:
         elif [[ $commit_message =~ ^feat.*: ]]; then
           version=$(semver --increment minor $version)
         fi
-        echo "new_version=$new_version" >> $GITHUB_OUTPUT
+        echo "version=$version" >> $GITHUB_OUTPUT
       shell: bash
