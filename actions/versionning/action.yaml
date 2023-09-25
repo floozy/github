@@ -1,0 +1,36 @@
+name: "Define the version of the application"
+description: "Check the vulnerabilities"
+inputs:
+  grype_version:
+    description: "what is the grype version to use"
+    required: true
+    default: 0.66.0
+  data:
+    description: "what is the data to check"
+    required: true
+  severity:
+    description: "what is the severity to fail"
+    required: true
+    default: medium
+runs:
+  using: "composite"
+  steps:
+    - name: Get latest tag
+      id: get_latest_tag
+      run: |
+        latest_tag=$(git describe --tags --abbrev=0)
+        echo "::set-output name=latest_tag::$latest_tag"
+      shell: bash
+    - name: Define new version
+      id: determine_new_version
+      run: |
+        latest_tag=${{ steps.get_latest_tag.outputs.latest_tag }}
+        commit_message=$(git log --merges --pretty=format:"%s" HEAD^..HEAD)
+        if [[ $commit_message == *"[feat]"* ]]; then
+          new_version=$(semver bump minor $latest_tag)
+        else
+          new_version=$(semver bump patch $latest_tag)
+        fi
+        echo $new_version
+        echo "::set-output name=new_version::$new_version"
+      shell: bash
