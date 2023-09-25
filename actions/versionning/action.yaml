@@ -7,6 +7,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: TEST
+      run: echo ${{ inputs.current_version }}
+      shell: bash
     - name: Install semver
       run: npm install -g semver
       shell: bash
