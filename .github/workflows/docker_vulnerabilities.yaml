@@ -1,0 +1,31 @@
+name: Check the vulnerabilities of the docker image
+
+on:
+  workflow_call:
+    inputs:
+      sparse-checkout:
+        required: false
+        type: string
+      severity:
+        required: false
+        type: string
+        default: critical
+
+jobs:
+  check_vulnerabilities_in_dockerfile:
+    name: Check vulnerabilities in Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ inputs.sparse-checkout }}
+          sparse-checkout-cone-mode: false
+      - name: Build image
+        uses: floozy/github/docker/actions/build@publish-image
+        with:
+          image_name: ${{ github.repository }}
+      - name: Check vulnerabilities
+        uses: floozy/github/actions/check-vulnerabilities@publish-image
+        with:
+          data: ${{ github.repository }}
+          severity: ${{ inputs.severity }}
