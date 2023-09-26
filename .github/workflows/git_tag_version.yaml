@@ -6,9 +6,6 @@ on:
       sparse_checkout:
         required: false
         type: string
-    secrets:
-      github_token:
-        required: true
 
 jobs:
   create_tag:
@@ -30,4 +27,4 @@ jobs:
           git tag $new_version
           git push origin $new_version
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
