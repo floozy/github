@@ -1,0 +1,46 @@
+name: Publish the docker image
+
+on:
+  workflow_call:
+    inputs:
+      sparse_checkout:
+        required: false
+        type: string
+      image_name:
+        required: true
+        type: string
+        default: ${{ github.repository }}
+      registry_username:
+        required: true
+        type: string
+        default: ${{ github.repository_owner }}
+    secrets:
+      registry_password:
+        required: true
+
+jobs:
+  create_tag:
+    name: Create a git tag for a new version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ inputs.sparse_checkout }}
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+      - name: Define new version
+        id: define_new_version
+        uses: floozy/github/actions/git/versionning@publish-image
+      - name: Build image
+        if: steps.define_new_version.outputs.version != ''
+        uses: floozy/github/actions/docker/build@publish-image
+        with:
+          image_name: ${{ inputs.image_name }}
+      - name: Publish image
+        if: steps.define_new_version.outputs.version != ''
+        uses: floozy/github/actions/docker/publish@publish-image
+        with:
+          registry_username: ${{ github.repository_owner }}
+          registry_password: ${{ secrets.registry_password }}
+          image_name: ${{ inputs.image_name }}
+          image_tag: ${{ steps.define_new_version.outputs.version }}
