@@ -10,7 +10,7 @@ on:
         required: false
         type: string
       cst_config_file_path:
-        required: false
+        required: true
         type: string
 
 jobs:
