@@ -1,0 +1,33 @@
+name: Set git tag
+
+on:
+  workflow_call:
+    inputs:
+      sparse_checkout:
+        required: false
+        type: string
+    secrets:
+      github_token:
+        required: true
+
+jobs:
+  create_tag:
+    name: Create a git tag for a new version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ inputs.sparse_checkout }}
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+      - name: Define new version
+        id: define_new_version
+        uses: floozy/github/actions/git/versionning@publish-image
+      - name: Push new tag
+        if: steps.define_new_version.outputs.version != ''
+        run: |
+          new_version=${{ steps.define_new_version.outputs.version }}
+          git tag $new_version
+          git push origin $new_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
