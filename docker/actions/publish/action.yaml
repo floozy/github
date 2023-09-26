@@ -26,7 +26,7 @@ runs:
       run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
       shell: bash
     - name: Tag image
-      run: docker tag ${{ inputs.image_name }}:${{ inputs.image_tag }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
+      run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
       shell: bash
     - name: Push image
       run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
