@@ -1,7 +1,17 @@
-name: Check the quality of the rust image
+name: Check the quality of the docker image
 
 on:
   workflow_call:
+    inputs:
+      sparse-checkout:
+        required: false
+        type: string
+      hadolint_config_file_path:
+        required: false
+        type: string
+      cst_config_file_path:
+        required: false
+        type: string
 
 jobs:
   check_linter:
@@ -10,14 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: |
-            Dockerfile
-            .hadolint.yaml
+          sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Check quality
         uses: floozy/github/docker/actions/check-quality@publish-image
         with:
-          hadolint_config_file_path: .hadolint.yaml
+          hadolint_config_file_path: ${{ inputs.hadolint_config_file_path }}
 
   run_tests:
     name: Run tests
@@ -26,9 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: |
-            Dockerfile
-            docker-test.yaml
+          sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Build image
         uses: floozy/github/docker/actions/build@publish-image
@@ -38,4 +44,4 @@ jobs:
         uses: floozy/github/docker/actions/test@publish-image
         with:
           image_name: ${{ github.repository }}
-          cst_config_file_path: docker-test.yaml
+          cst_config_file_path: ${{ inputs.cst_config_file_path }}
