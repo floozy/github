@@ -7,11 +7,11 @@ on:
         required: false
         type: string
       image_name:
-        required: true
+        required: false
         type: string
         default: ${{ github.repository }}
       registry_username:
-        required: true
+        required: false
         type: string
         default: ${{ github.repository_owner }}
     secrets:
