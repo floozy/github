@@ -3,7 +3,7 @@ name: Check the vulnerabilities of the docker image
 on:
   workflow_call:
     inputs:
-      sparse-checkout:
+      sparse_checkout:
         required: false
         type: string
       severity:
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: ${{ inputs.sparse-checkout }}
+          sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
       - name: Build image
         uses: floozy/github/actions/docker/build@publish-image
