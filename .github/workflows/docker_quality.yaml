@@ -23,7 +23,7 @@ jobs:
           sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Check quality
-        uses: floozy/github/docker/actions/check-quality@publish-image
+        uses: floozy/github/actions/docker/check-quality@publish-image
         with:
           hadolint_config_file_path: ${{ inputs.hadolint_config_file_path }}
 
@@ -37,11 +37,11 @@ jobs:
           sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Build image
-        uses: floozy/github/docker/actions/build@publish-image
+        uses: floozy/github/actions/docker/build@publish-image
         with:
           image_name: ${{ github.repository }}
       - name: Run tests
-        uses: floozy/github/docker/actions/test@publish-image
+        uses: floozy/github/actions/docker/test@publish-image
         with:
           image_name: ${{ github.repository }}
           cst_config_file_path: ${{ inputs.cst_config_file_path }}

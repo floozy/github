@@ -21,7 +21,7 @@ jobs:
           sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Build image
-        uses: floozy/github/docker/actions/build@publish-image
+        uses: floozy/github/actions/docker/build@publish-image
         with:
           image_name: ${{ github.repository }}
       - name: Check vulnerabilities
