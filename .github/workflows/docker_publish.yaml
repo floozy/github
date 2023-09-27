@@ -6,6 +6,7 @@ on:
       sparse_checkout:
         required: false
         type: string
+        default: Dockerfile
       image_name:
         required: false
         type: string
@@ -19,8 +20,8 @@ on:
         required: true
 
 jobs:
-  create_tag:
-    name: Create a git tag for a new version
+  publish_docker_image:
+    name: Publish the docker image with the correct version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,15 +29,15 @@ jobs:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
           fetch-depth: 0
-      - name: Define new version
+      - name: Define the new version based on SemVer
         id: define_new_version
         uses: floozy/github/actions/git/versionning@publish-image
-      - name: Build image
+      - name: Build the image
         if: steps.define_new_version.outputs.version != ''
         uses: floozy/github/actions/docker/build@publish-image
         with:
           image_name: ${{ inputs.image_name }}
-      - name: Publish image
+      - name: Publish the image
         if: steps.define_new_version.outputs.version != ''
         uses: floozy/github/actions/docker/publish@publish-image
         with:

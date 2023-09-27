@@ -6,25 +6,26 @@ on:
       sparse_checkout:
         required: false
         type: string
+        default: Dockerfile
       severity:
         required: false
         type: string
-        default: critical
+        default: low
 
 jobs:
   check_vulnerabilities_in_dockerfile:
-    name: Check vulnerabilities in Dockerfile
+    name: Check the vulnerabilities in Dockerfile
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
-      - name: Build image
+      - name: Build the image
         uses: floozy/github/actions/docker/build@publish-image
         with:
           image_name: ${{ github.repository }}
-      - name: Check vulnerabilities
+      - name: Check the vulnerabilities with Grype
         uses: floozy/github/actions/check-vulnerabilities@publish-image
         with:
           data: ${{ github.repository }}
