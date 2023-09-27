@@ -1,12 +1,12 @@
 name: "Build image"
-description: "Build an image"
+description: "Build a docker image"
 inputs:
   image_name:
     description: "what is the name of the image to build"
     required: true
     default: ${{ github.repository }}
   dockerfile_path:
-    description: "where is the dockerfile to check"
+    description: "where is the dockerfile used to build"
     required: true
     default: "./Dockerfile"
   context:

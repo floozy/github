@@ -1,5 +1,5 @@
 name: "Publish"
-description: "Build and publish the image"
+description: "Build and publish the docker image"
 inputs:
   registry_fqdn:
     description: "what is the fqdn of the registry used"

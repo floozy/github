@@ -1,5 +1,5 @@
 name: "Check vulnerabilities"
-description: "Check the vulnerabilities"
+description: "Check the vulnerabilities based on grype"
 inputs:
   grype_version:
     description: "what is the grype version to use"
@@ -11,7 +11,7 @@ inputs:
   severity:
     description: "what is the severity to fail"
     required: true
-    default: medium
+    default: low
 runs:
   using: "composite"
   steps:
