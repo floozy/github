@@ -1,0 +1,24 @@
+name: "Run tests"
+description: "Run the tests to validate an image"
+inputs:
+  image_name:
+    description: "what is the name of the image to test"
+    required: true
+    default: ${{ github.ref_name }}
+  cst_config_file_path:
+    description: "where is the container structure test config file to use"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install Container Structure Test
+      run: |
+        arch=$(uname -m | sed 's/x86_64/amd64/')
+        system=$(uname -s | tr '[:upper:]' '[:lower:]')
+        curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-$system-$arch && \
+        chmod +x container-structure-test-$system-$arch && \
+        sudo mv container-structure-test-$system-$arch /usr/local/bin/container-structure-test
+      shell: bash
+    - name: Run Container Structure Test
+      run: container-structure-test test --image ${{ inputs.image_name }} --config ${{ inputs.cst_config_file_path }}
+      shell: bash

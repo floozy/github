@@ -1,0 +1,39 @@
+name: "Define new version"
+description: "Define the new version based on convential commit"
+outputs:
+  version:
+    description: "the new version definied or nothing"
+    value: ${{ steps.determine_new_version.outputs.version }}
+runs:
+  using: "composite"
+  steps:
+    - name: Install semver
+      run: npm install -g semver
+      shell: bash
+    - name: Get current version
+      id: get_current_version
+      run: |
+        if [[ -n $(git tag) ]]; then
+          echo "current_version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        else
+          # If no tag is found, the version is initialized to 0.0.0
+          echo "current_version=0.0.0" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+    - name: Define the new version
+      id: determine_new_version
+      run: |
+        version=${{ steps.get_current_version.outputs.current_version }}
+        commit_message=$(git log --pretty=format:"%s" HEAD^..HEAD)
+        if [[ $commit_message =~ .*!.*: ]]; then
+          version=$(semver --increment major $version)
+        elif [[ $commit_message =~ ^fix.*: ]]; then
+          version=$(semver --increment patch $version)
+        elif [[ $commit_message =~ ^feat.*: ]]; then
+          version=$(semver --increment minor $version)
+        else
+          # If the commit does not contain a valid model, there is no evolution and therefore no new version.
+          version=''
+        fi
+        echo "version=$version" >> $GITHUB_OUTPUT
+      shell: bash
