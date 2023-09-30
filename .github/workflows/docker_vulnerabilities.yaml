@@ -22,11 +22,11 @@ jobs:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
       - name: Build the image
-        uses: floozy/github/actions/docker/build
+        uses: floozy/github/actions/docker/build@main
         with:
           image_name: ${{ github.repository }}
       - name: Check the vulnerabilities with Grype
-        uses: floozy/github/actions/check-vulnerabilities
+        uses: floozy/github/actions/check-vulnerabilities@main
         with:
           data: ${{ github.repository }}
           severity: ${{ inputs.severity }}

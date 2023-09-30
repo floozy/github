@@ -31,15 +31,15 @@ jobs:
           fetch-depth: 0
       - name: Define the new version based on SemVer
         id: define_new_version
-        uses: floozy/github/actions/git/versionning
+        uses: floozy/github/actions/git/versionning@main
       - name: Build the image
         if: steps.define_new_version.outputs.version != ''
-        uses: floozy/github/actions/docker/build
+        uses: floozy/github/actions/docker/build@main
         with:
           image_name: ${{ inputs.image_name }}
       - name: Publish the image
         if: steps.define_new_version.outputs.version != ''
-        uses: floozy/github/actions/docker/publish
+        uses: floozy/github/actions/docker/publish@main
         with:
           registry_username: ${{ github.repository_owner }}
           registry_password: ${{ secrets.registry_password }}
