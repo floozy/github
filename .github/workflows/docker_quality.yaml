@@ -27,7 +27,7 @@ jobs:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
       - name: Check the quality with Hadolint
-        uses: floozy/github/actions/docker/check-quality@publish-image
+        uses: floozy/github/actions/docker/check-quality
         with:
           hadolint_config_file_path: ${{ inputs.hadolint_config_file_path }}
 
@@ -41,11 +41,11 @@ jobs:
           sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
       - name: Build the image
-        uses: floozy/github/actions/docker/build@publish-image
+        uses: floozy/github/actions/docker/build
         with:
           image_name: ${{ github.repository }}
       - name: Run the tests with Container Structure Test
-        uses: floozy/github/actions/docker/test@publish-image
+        uses: floozy/github/actions/docker/test
         with:
           image_name: ${{ github.repository }}
           cst_config_file_path: ${{ inputs.cst_config_file_path }}
