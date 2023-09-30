@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Define the new version based on SemVer
         id: define_new_version
-        uses: floozy/github/actions/git/versionning
+        uses: floozy/github/actions/git/versionning@main
       - name: Push the new tag
         if: steps.define_new_version.outputs.version != ''
         run: |
