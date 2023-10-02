@@ -66,5 +66,5 @@ jobs:
       - name: Run the tests with Container Structure Test
         uses: floozy/github/actions/docker/test@main
         with:
-          image_name: ${{ github.repository }}
+          image_name: ${{ inputs.image_name }}
           cst_config_file_path: ${{ inputs.cst_config_file_path }}
