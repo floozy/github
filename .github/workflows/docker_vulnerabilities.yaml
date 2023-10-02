@@ -7,6 +7,21 @@ on:
         required: false
         type: string
         default: Dockerfile
+      image_name:
+        required: false
+        type: string
+        default: ${{ github.repository }}
+      dockerfile_path:
+        required: false
+        type: string
+        default: "./Dockerfile"
+      context:
+        required: false
+        type: string
+        default: "."
+      image_build_args:
+        required: false
+        type: string
       severity:
         required: false
         type: string
@@ -24,7 +39,10 @@ jobs:
       - name: Build the image
         uses: floozy/github/actions/docker/build@main
         with:
-          image_name: ${{ github.repository }}
+          image_name: ${{ inputs.image_name }}
+          dockerfile_path: ${{ inputs.dockerfile_path }}
+          context: ${{ inputs.context }}
+          image_build_args: ${{ inputs.image_build_args }}
       - name: Check the vulnerabilities with Grype
         uses: floozy/github/actions/check-vulnerabilities@main
         with:

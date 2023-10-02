@@ -10,6 +10,21 @@ on:
           Dockerfile
           .hadolint.yaml
           docker-test.yaml
+      image_name:
+        required: false
+        type: string
+        default: ${{ github.repository }}
+      dockerfile_path:
+        required: false
+        type: string
+        default: "./Dockerfile"
+      context:
+        required: false
+        type: string
+        default: "."
+      image_build_args:
+        required: false
+        type: string
       hadolint_config_file_path:
         required: false
         type: string
@@ -29,6 +44,7 @@ jobs:
       - name: Check the quality with Hadolint
         uses: floozy/github/actions/docker/check-quality@main
         with:
+          dockerfile_path: ${{ inputs.dockerfile_path }}
           hadolint_config_file_path: ${{ inputs.hadolint_config_file_path }}
 
   run_tests:
@@ -43,7 +59,10 @@ jobs:
       - name: Build the image
         uses: floozy/github/actions/docker/build@main
         with:
-          image_name: ${{ github.repository }}
+          image_name: ${{ inputs.image_name }}
+          dockerfile_path: ${{ inputs.dockerfile_path }}
+          context: ${{ inputs.context }}
+          image_build_args: ${{ inputs.image_build_args }}
       - name: Run the tests with Container Structure Test
         uses: floozy/github/actions/docker/test@main
         with:
