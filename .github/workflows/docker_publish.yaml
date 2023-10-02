@@ -30,10 +30,6 @@ on:
         required: false
         type: string
         default: ${{ github.repository_owner }}
-      registry_password:
-        required: false
-        type: string
-        default: ${{ secrets.registry_password }}
     secrets:
       registry_password:
         required: true
@@ -65,6 +61,6 @@ jobs:
         with:
           registry_fqdn: ${{ inputs.registry_fqdn }}
           registry_username: ${{ inputs.registry_username }}
-          registry_password: ${{ inputs.registry_password }}
+          registry_password: ${{ secrets.registry_password }}
           image_name: ${{ inputs.image_name }}
           image_tag: ${{ steps.define_new_version.outputs.version }}
