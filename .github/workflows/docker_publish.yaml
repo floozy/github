@@ -38,6 +38,8 @@ jobs:
   publish_docker_image:
     name: Publish the docker image with the correct version
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.define_new_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
