@@ -7,35 +7,37 @@ on:
         required: false
         type: string
         default: Dockerfile
-      need_login:
+      need_registry_src:
         required: false
         type: boolean
-      registry_fqdn:
-        required: false
+      registry_src_fqdn:
         type: string
         default: ghcr.io
-      registry_username:
-        required: false
+      registry_src_username:
+        type: string
+        default: ${{ github.repository_owner }}
+      registry_dst_fqdn:
+        type: string
+        default: ghcr.io
+      registry_dst_username:
         type: string
         default: ${{ github.repository_owner }}
       image_name:
-        required: false
         type: string
         default: ${{ github.repository }}
       dockerfile_path:
-        required: false
         type: string
         default: "./Dockerfile"
       context:
-        required: false
         type: string
         default: "."
       image_build_args:
-        required: false
         type: string
     secrets:
-      registry_password:
+      registry_src_password:
         required: false
+      registry_dst_password:
+        required: true
 
 jobs:
   publish_docker_image:
@@ -49,16 +51,18 @@ jobs:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
           fetch-depth: 0
+
       - name: Define the new version based on SemVer
         id: define_new_version
         uses: floozy/github/actions/git/versionning@main
+
       - name: Login to the docker registry
-        if: inputs.need_login
+        if: inputs.need_registry_src
         uses: floozy/github/actions/docker/login@main
         with:
-          registry_fqdn: ${{ inputs.registry_fqdn }}
-          registry_username: ${{ inputs.registry_username }}
-          registry_password: ${{ secrets.registry_password }}
+          registry_fqdn: ${{ inputs.registry_src_fqdn }}
+          registry_username: ${{ inputs.registry_src_username }}
+          registry_password: ${{ secrets.registry_src_password }}
           image_name: ${{ inputs.image_name }}
       - name: Build the image
         if: steps.define_new_version.outputs.version != ''
@@ -68,10 +72,18 @@ jobs:
           dockerfile_path: ${{ inputs.dockerfile_path }}
           context: ${{ inputs.context }}
           image_build_args: ${{ inputs.image_build_args }}
+
+      - name: Login to the docker registry
+        uses: floozy/github/actions/docker/login@main
+        with:
+          registry_fqdn: ${{ inputs.registry_dst_fqdn }}
+          registry_username: ${{ inputs.registry_dst_username }}
+          registry_password: ${{ secrets.registry_dst_password }}
+          image_name: ${{ inputs.image_name }}
       - name: Publish the image
         if: steps.define_new_version.outputs.version != ''
         uses: floozy/github/actions/docker/publish@main
         with:
-          registry_fqdn: ${{ inputs.registry_fqdn }}
+          registry_fqdn: ${{ inputs.registry_dst_fqdn }}
           image_name: ${{ inputs.image_name }}
           image_tag: ${{ steps.define_new_version.outputs.version }}

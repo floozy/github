@@ -4,24 +4,26 @@ inputs:
   registry_fqdn:
     description: "what is the fqdn of the registry used"
     required: true
-    default: ghcr.io
   image_name:
     description: "what is the name of the image to push"
     required: true
-    default: ${{ github.repository }}
   image_tag:
     description: "what is the tag of the image to push"
-    required: true
-    default: ${{ github.ref_name }}
+    required: false
 runs:
   using: "composite"
   steps:
-    - name: Tag image with the correct version
+    - name: Tag image with the version
+      if: image_tag
       run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
       shell: bash
     - name: Tag image with the latest tag
       run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:latest
       shell: bash
-    - name: Push image
+    - name: Push image with the version tagged
+      if: image_tag
       run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
+      shell: bash
+    - name: Push latest image
+      run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:latest
       shell: bash

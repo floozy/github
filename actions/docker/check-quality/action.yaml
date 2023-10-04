@@ -4,7 +4,6 @@ inputs:
   dockerfile_path:
     description: "where is the dockerfile to check"
     required: true
-    default: "./Dockerfile"
   hadolint_version:
     description: "what is the hadolint version to use"
     required: true

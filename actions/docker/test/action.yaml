@@ -4,7 +4,6 @@ inputs:
   image_name:
     description: "what is the name of the image to test"
     required: true
-    default: ${{ github.ref_name }}
   cst_config_file_path:
     description: "where is the container structure test config file to use"
     required: true

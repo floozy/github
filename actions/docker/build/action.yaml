@@ -4,15 +4,12 @@ inputs:
   image_name:
     description: "what is the name of the image to build"
     required: true
-    default: ${{ github.repository }}
   dockerfile_path:
     description: "where is the dockerfile used to build"
     required: true
-    default: "./Dockerfile"
   context:
     description: "where is the directory with all the files used to build the image"
     required: true
-    default: "."
   image_build_args:
     description: "add build arg used to build an image"
     required: false
