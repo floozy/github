@@ -7,6 +7,9 @@ on:
         required: false
         type: string
         default: Dockerfile
+      need_login:
+        required: false
+        type: boolean
       registry_fqdn:
         required: false
         type: string

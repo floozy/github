@@ -10,6 +10,9 @@ on:
           Dockerfile
           .hadolint.yaml
           docker-test.yaml
+      need_login:
+        required: false
+        type: boolean
       registry_fqdn:
         required: false
         type: string
