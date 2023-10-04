@@ -7,6 +7,17 @@ on:
         required: false
         type: string
         default: Dockerfile
+      need_login:
+        required: false
+        type: boolean
+      registry_fqdn:
+        required: false
+        type: string
+        default: ghcr.io
+      registry_username:
+        required: false
+        type: string
+        default: ${{ github.repository_owner }}
       image_name:
         required: false
         type: string
@@ -22,17 +33,9 @@ on:
       image_build_args:
         required: false
         type: string
-      registry_fqdn:
-        required: false
-        type: string
-        default: ghcr.io
-      registry_username:
-        required: false
-        type: string
-        default: ${{ github.repository_owner }}
     secrets:
       registry_password:
-        required: true
+        required: false
 
 jobs:
   publish_docker_image:
@@ -50,7 +53,7 @@ jobs:
         id: define_new_version
         uses: floozy/github/actions/git/versionning@main
       - name: Login to the docker registry
-        if: steps.define_new_version.outputs.version != ''
+        if: inputs.need_login
         uses: floozy/github/actions/docker/login@main
         with:
           registry_fqdn: ${{ inputs.registry_fqdn }}

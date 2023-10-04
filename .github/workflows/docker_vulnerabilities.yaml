@@ -7,6 +7,14 @@ on:
         required: false
         type: string
         default: Dockerfile
+      registry_fqdn:
+        required: false
+        type: string
+        default: ghcr.io
+      registry_username:
+        required: false
+        type: string
+        default: ${{ github.repository_owner }}
       image_name:
         required: false
         type: string
@@ -26,6 +34,9 @@ on:
         required: false
         type: string
         default: low
+    secrets:
+      registry_password:
+        required: false
 
 jobs:
   check_vulnerabilities_in_dockerfile:
@@ -36,6 +47,14 @@ jobs:
         with:
           sparse-checkout: ${{ inputs.sparse_checkout }}
           sparse-checkout-cone-mode: false
+      - name: Login to the docker registry
+        if: inputs.need_login
+        uses: floozy/github/actions/docker/login@main
+        with:
+          registry_fqdn: ${{ inputs.registry_fqdn }}
+          registry_username: ${{ inputs.registry_username }}
+          registry_password: ${{ secrets.registry_password }}
+          image_name: ${{ inputs.image_name }}
       - name: Build the image
         uses: floozy/github/actions/docker/build@main
         with:
