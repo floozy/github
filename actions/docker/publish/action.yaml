@@ -1,16 +1,10 @@
-name: "Publish"
-description: "Build and publish the docker image"
+name: "Publish image"
+description: "Publish the docker image"
 inputs:
   registry_fqdn:
     description: "what is the fqdn of the registry used"
     required: true
     default: ghcr.io
-  registry_username:
-    description: "what is the username used to login to the registry"
-    required: true
-  registry_password:
-    description: "what is the password used to login to the registry"
-    required: true
   image_name:
     description: "what is the name of the image to push"
     required: true
@@ -22,9 +16,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Login to Github Container Registry
-      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
-      shell: bash
     - name: Tag image with the correct version
       run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
       shell: bash

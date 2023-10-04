@@ -1,0 +1,23 @@
+name: "Login to registry"
+description: "Login to access to docker registry"
+inputs:
+  registry_fqdn:
+    description: "what is the fqdn of the registry used"
+    required: true
+    default: ghcr.io
+  registry_username:
+    description: "what is the username used to login to the registry"
+    required: true
+  registry_password:
+    description: "what is the password used to login to the registry"
+    required: true
+  image_name:
+    description: "what is the name of the image"
+    required: true
+    default: ${{ github.repository }}
+runs:
+  using: "composite"
+  steps:
+    - name: Login to Github Container Registry
+      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
+      shell: bash

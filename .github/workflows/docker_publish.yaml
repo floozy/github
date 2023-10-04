@@ -49,6 +49,14 @@ jobs:
       - name: Define the new version based on SemVer
         id: define_new_version
         uses: floozy/github/actions/git/versionning@main
+      - name: Login to the docker registry
+        if: steps.define_new_version.outputs.version != ''
+        uses: floozy/github/actions/docker/login@main
+        with:
+          registry_fqdn: ${{ inputs.registry_fqdn }}
+          registry_username: ${{ inputs.registry_username }}
+          registry_password: ${{ secrets.registry_password }}
+          image_name: ${{ inputs.image_name }}
       - name: Build the image
         if: steps.define_new_version.outputs.version != ''
         uses: floozy/github/actions/docker/build@main
@@ -62,7 +70,5 @@ jobs:
         uses: floozy/github/actions/docker/publish@main
         with:
           registry_fqdn: ${{ inputs.registry_fqdn }}
-          registry_username: ${{ inputs.registry_username }}
-          registry_password: ${{ secrets.registry_password }}
           image_name: ${{ inputs.image_name }}
           image_tag: ${{ steps.define_new_version.outputs.version }}
