@@ -31,7 +31,7 @@ on:
         type: string
         default: low
     secrets:
-      registry_password:
+      registry_src_password:
         required: false
 
 jobs:
