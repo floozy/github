@@ -10,27 +10,34 @@ on:
           Dockerfile
           .hadolint.yaml
           docker-test.yaml
-      image_name:
+      need_registry_src:
         required: false
+        type: boolean
+      registry_src_fqdn:
+        type: string
+        default: ghcr.io
+      registry_src_username:
+        type: string
+        default: ${{ github.repository_owner }}
+      image_name:
         type: string
         default: ${{ github.repository }}
       dockerfile_path:
-        required: false
         type: string
         default: "./Dockerfile"
       context:
-        required: false
         type: string
         default: "."
       image_build_args:
-        required: false
         type: string
       hadolint_config_file_path:
-        required: false
         type: string
       cst_config_file_path:
         required: true
         type: string
+    secrets:
+      registry_src_password:
+        required: false
 
 jobs:
   check_linter:
@@ -56,6 +63,15 @@ jobs:
         with:
           sparse-checkout: ${{ inputs.sparse-checkout }}
           sparse-checkout-cone-mode: false
+
+      - name: Login to the docker registry
+        if: inputs.need_registry_src
+        uses: floozy/github/actions/docker/login@main
+        with:
+          registry_fqdn: ${{ inputs.registry_src_fqdn }}
+          registry_username: ${{ inputs.registry_src_username }}
+          registry_password: ${{ secrets.registry_src_password }}
+          image_name: ${{ inputs.image_name }}
       - name: Build the image
         uses: floozy/github/actions/docker/build@main
         with:
@@ -63,6 +79,7 @@ jobs:
           dockerfile_path: ${{ inputs.dockerfile_path }}
           context: ${{ inputs.context }}
           image_build_args: ${{ inputs.image_build_args }}
+
       - name: Run the tests with Container Structure Test
         uses: floozy/github/actions/docker/test@main
         with:

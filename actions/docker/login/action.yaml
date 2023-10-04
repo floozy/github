@@ -1,0 +1,26 @@
+name: "Login to registry"
+description: "Login to access to docker registry"
+inputs:
+  registry_fqdn:
+    description: "what is the fqdn of the registry used"
+    required: true
+  registry_username:
+    description: "what is the username used to login to the registry"
+    required: false
+  registry_password:
+    description: "what is the password used to login to the registry"
+    required: false
+  image_name:
+    description: "what is the name of the image"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Login to a docker registry
+      if: inputs.registry_username && inputs.registry_password
+      run: docker login -u ${{ inputs.registry_username }} -p ${{ inputs.registry_password }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
+      shell: bash
+    - name: Login to a docker registry
+      if: inputs.registry_username == '' && inputs.registry_password == ''
+      run: docker login ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}
+      shell: bash

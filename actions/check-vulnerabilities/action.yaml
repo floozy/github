@@ -11,7 +11,6 @@ inputs:
   severity:
     description: "what is the severity to fail"
     required: true
-    default: low
 runs:
   using: "composite"
   steps:
