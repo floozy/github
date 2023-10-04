@@ -14,14 +14,14 @@ runs:
   using: "composite"
   steps:
     - name: Tag image with the version
-      if: image_tag
+      if: inputs.image_tag
       run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
       shell: bash
     - name: Tag image with the latest tag
       run: docker tag ${{ inputs.image_name }} ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:latest
       shell: bash
     - name: Push image with the version tagged
-      if: image_tag
+      if: inputs.image_tag
       run: docker push ${{ inputs.registry_fqdn }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
       shell: bash
     - name: Push latest image
