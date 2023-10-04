@@ -1,6 +1,19 @@
 name: "Build image"
 description: "Build a docker image"
 inputs:
+  need_login:
+    description: "if a registry login is mandatory to pull base image"
+    required: false
+  registry_fqdn:
+    description: "what is the fqdn of the registry used"
+    required: false
+    default: ghcr.io
+  registry_username:
+    description: "what is the username used to login to the registry"
+    required: false
+  registry_password:
+    description: "what is the password used to login to the registry"
+    required: false
   image_name:
     description: "what is the name of the image to build"
     required: true
@@ -19,6 +32,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Login to the docker registry
+      if: inputs.need_login
+      uses: floozy/github/actions/docker/login@main
+      with:
+        registry_fqdn: ${{ inputs.registry_fqdn }}
+        registry_username: ${{ inputs.registry_username }}
+        registry_password: ${{ secrets.registry_password }}
+        image_name: ${{ inputs.image_name }}
     - name: Build image
       if: inputs.image_build_args
       run: docker build -t ${{ inputs.image_name }} --build-arg ${{ inputs.image_build_args }} ${{ inputs.dockerfile_path }} ${{ inputs.context }}
